@@ -1,0 +1,30 @@
+groups:
+  - name: "idrac-alerts"
+    rules:
+      - alert: ServerNotHealthy
+        expr: idrac_system_health{status!="OK"}
+        for: 3m
+        keep_firing_for: 5m
+        labels:
+          severity: >
+            {{- if $labels.status -}}
+            {{- if eq $labels.status "Warning" -}}
+            warning
+            {{- else if eq $labels.status "Critical" -}}
+            critical
+            {{- end -}}
+            {{- else -}}
+            critical
+            {{- end -}}
+        annotations:
+          description: Server {{ $labels.instance }} is not healthy, current status is {{ $labels.status }}. Please check server BMC system event log.
+          summary: Hardware server status is not healthy.
+      - alert: ServerNotReporting
+        expr: up{job=~".*idrac.*"} == 0
+        for: 15m
+        keep_firing_for: 5m
+        labels:
+          severity: warning
+        annotations:
+          description: Server {{ $labels.instance }} failed to reply via Redfish API. Please check idrac_exporter logs for more details.
+          summary: Hardware server failed to reply to monitoring via Redfish API.

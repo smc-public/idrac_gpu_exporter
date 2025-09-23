@@ -1,0 +1,126 @@
+replicaCount: 1
+
+image:
+  repository: mrlhansen/idrac_exporter
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 9348
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+
+volumes: []
+# - name: config-templated
+#   emptyDir:
+#     sizeLimit: 16Mi
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+volumeMounts: []
+# - mountPath: /app/config
+#   name: config-templated
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+extraArgs: []
+
+idracConfig: |
+  address: 0.0.0.0
+  port: 9348
+  timeout: 60
+  hosts:
+    default:
+      username: USERNAME
+      password: PASSWORD
+  metrics:
+    all: true
+
+env: []
+# - name: CONFIG_DEFAULT_USERNAME
+#   value: root
+# - name: CONFIG_DEFAULT_PASSWORD
+#   valueFrom:
+#     secretKeyRef:
+#        name: my-external-idrac-secret
+#        key: idrac-password
+
+podAnnotations:
+  prometheus.io/scrape: "false"
+  prometheus.io/path: "/metrics"
+  prometheus.io/port: "9348"
+
+# TODO: Create defaults using relabel configs mentioned in README.
+# https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#relabelconfig
+# Use {{ tpl "{{ include \"idrac-exporter.fullname\" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}" . }} for the service endpoint
+
+prometheus:
+  monitor:
+    enabled: false
+    additionalLabels: {}
+    interval: 15s
+    namespace: []
+    metricRelabelings: []
+    relabelings: []
+    targetLabels: []
+
+  rules:
+    enabled: false
+    additionalLabels: {}
+    namespace: ""
+    additionalRules: []
