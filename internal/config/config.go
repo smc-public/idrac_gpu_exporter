@@ -141,6 +141,7 @@ func (c *RootConfig) Validate() error {
 		c.Collect.Memory = true
 		c.Collect.Network = true
 		c.Collect.Processors = true
+		c.Collect.GPUs = true
 		c.Collect.Extra = true
 	}
 

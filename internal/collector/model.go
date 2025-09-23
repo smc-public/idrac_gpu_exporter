@@ -136,6 +136,60 @@ type Processor struct {
 	} `json:"Oem"`
 }
 
+type GPU struct {
+	Id                    string  `json:"Id"`
+	Name                  string  `json:"Name"`
+	Description           string  `json:"Description"`
+	Manufacturer          string  `json:"Manufacturer"`
+	Model                 string  `json:"Model"`
+	PartNumber            string  `json:"PartNumber"`
+	Metrics               Odata  `json:"Metrics"`
+	MemorySummary         struct {
+        Metrics           Odata `json:"Metrics"`
+	} `json:"MemorySummary"`
+	ProcessorType     string  `json:"ProcessorType"`
+	Status            Status  `json:"Status"`
+}
+
+type DellVideoMember struct {
+	Id		     string  `json:"Id"`
+	GPUGUID	     string  `json:"GPUGUID"`
+	GPUHealth 	 string  `json:"GPUHealth"`
+	GPUState 	 string  `json:"GPUState"`
+	SerialNumber string  `json:"SerialNumber"`
+}
+
+type DellVideo struct {
+	Members []DellVideoMember `json:"Members"`
+}
+
+type DellGPUSensorMember struct {
+	Id		     string  `json:"Id"`
+	BoardPowerSupplyStatus	 string  `json:"BoardPowerSupplyStatus"`
+	MemoryTemperatureCelsius float64 `json:"MemoryTemperatureCelsius"`
+	PowerBrakeStatus 	 string  `json:"PowerBrakeStatus"`
+	PowerConsumptionmW	 float64 `json:"PowerConsumptionmW"`
+	PrimaryGPUTemperatureCelsius float64 `json:"PrimaryGPUTemperatureCelsius"`
+	ThermalAlertStatus	 string  `json:"ThermalAlertStatus"`
+}
+
+type DellGPUSensors struct {
+	Members []DellGPUSensorMember `json:"Members"`
+}
+
+type GPUMetrics struct {
+	Id                    string  `json:"Id"`
+    TemperatureCelsius	  float64 `json:"TemperatureCelsius"`
+    ConsumedPowerWatt 	  float64 `json:"ConsumedPowerWatt"`
+    OperatingSpeedMHz	  float64 `json:"OperatingSpeedMHz"`
+    BandwidthPercent      float64 `json:"BandwidthPercent"`
+}
+
+type GPUMemoryMetrics struct {
+    BandwidthPercent	  float64 `json:"BandwidthPercent"`
+    OperatingSpeedMHz 	  float64 `json:"OperatingSpeedMHz"`
+}
+
 type ChassisResponse struct {
 	Name                    string `json:"Name"`
 	AssetTag                string `json:"AssetTag"`

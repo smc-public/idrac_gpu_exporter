@@ -69,6 +69,7 @@ func (c *RootConfig) FromEnvironment() {
 	getEnvBool("CONFIG_METRICS_MEMORY", &c.Collect.Memory)
 	getEnvBool("CONFIG_METRICS_NETWORK", &c.Collect.Network)
 	getEnvBool("CONFIG_METRICS_PROCESSORS", &c.Collect.Processors)
+	getEnvBool("CONFIG_METRICS_GPUS", &c.Collect.GPUs)
 	getEnvBool("CONFIG_METRICS_EXTRA", &c.Collect.Extra)
 
 	def, ok := c.Hosts["default"]

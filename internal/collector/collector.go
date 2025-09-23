@@ -102,6 +102,22 @@ type Collector struct {
 	CpuTotalCores   *prometheus.Desc
 	CpuTotalThreads *prometheus.Desc
 
+	// GPUs
+	GPUInfo         *prometheus.Desc
+	GPUState        *prometheus.Desc 
+	GPUHealth       *prometheus.Desc
+	GPUBoardPowerSupplyStatus       *prometheus.Desc
+	GPUMemoryTemperatureCelsius       *prometheus.Desc
+	GPUPowerBrakeStatus       *prometheus.Desc
+	GPUPowerConsumptionmW       *prometheus.Desc
+	GPUPrimaryGPUTemperatureCelsius       *prometheus.Desc
+	GPUThermalAlertStatus       *prometheus.Desc
+	GPUBandwidthPercent       *prometheus.Desc
+	GPUConsumedPowerWatt      *prometheus.Desc
+	GPUOperatingSpeedMHz       *prometheus.Desc
+	GPUMemoryBandwidthPercent       *prometheus.Desc
+	GPUMemoryOperatingSpeedMHz       *prometheus.Desc
+
 	// Dell OEM
 	DellBatteryRollupHealth       *prometheus.Desc
 	DellEstimatedSystemAirflowCFM *prometheus.Desc
@@ -401,6 +417,76 @@ func NewCollector() *Collector {
 			"Total number of CPU threads",
 			[]string{"id"}, nil,
 		),
+		GPUInfo: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "info"),
+			"Information about the GPU",
+			[]string{"id", "manufacturer", "model", "part_number", "serial_number", "uuid"}, nil,
+		),
+		GPUState: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "state"),
+			"State of the GPU",
+			[]string{"id", "state"}, nil,
+		),
+		GPUHealth: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "health"),
+			"Health status of the GPU",
+			[]string{"id", "status"}, nil,
+		),
+		GPUBoardPowerSupplyStatus: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "board_power_supply_status"),
+			"Status of the GPU board power supply",
+			[]string{"id", "status"}, nil,
+		),
+		GPUMemoryTemperatureCelsius: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "memory_temperature_celsius"),
+			"Temperature of the GPU memory in celsius",
+			[]string{"id"}, nil,
+		),
+		GPUPowerBrakeStatus: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "power_brake_status"),
+			"Status of the GPU power brake",
+			[]string{"id", "status"}, nil,
+		),
+		GPUPowerConsumptionmW: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "power_consumption_mW"),
+			"Power consumption of the GPU in mW",
+			[]string{"id"}, nil,
+		),
+		GPUPrimaryGPUTemperatureCelsius: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "primary_gpu_temperature_celsius"),
+			"Primary temperature of the GPU in celsius",
+			[]string{"id"}, nil,
+		),
+		GPUThermalAlertStatus: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "thermal_alert_status"),
+			"Thermal alert status of the GPU",
+			[]string{"id", "status"}, nil,
+		),
+		GPUBandwidthPercent: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "bandwidth_percent"),
+			"Utilization of the GPU in percent",
+			[]string{"id"}, nil,
+		),
+		GPUConsumedPowerWatt: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "consumed_power_watt"),
+			"Power consumed by the GPU in watts",
+			[]string{"id"}, nil,
+		),
+		GPUOperatingSpeedMHz: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "operating_speed_mhz"),
+			"Operating speed of the GPU in Mhz",
+			[]string{"id"}, nil,
+		),
+		GPUMemoryBandwidthPercent: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "memory_bandwidth_percent"),
+			"Utilization of the GPU memory in percent",
+			[]string{"id"}, nil,
+		),
+		GPUMemoryOperatingSpeedMHz: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "memory_operating_speed_mhz"),
+			"Operating speed of the GPU memory in Mhz",
+			[]string{"id"}, nil,
+		),
 		DellBatteryRollupHealth: prometheus.NewDesc(
 			prometheus.BuildFQName(prefix, "dell", "battery_rollup_health"),
 			"Health rollup status for the batteries",
@@ -484,7 +570,21 @@ func (collector *Collector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.CpuCurrentSpeed
 	ch <- collector.CpuTotalCores
 	ch <- collector.CpuTotalThreads
-	ch <- collector.DellBatteryRollupHealth
+	ch <- collector.GPUInfo
+	ch <- collector.GPUHealth
+	ch <- collector.GPUState
+	ch <- collector.GPUBoardPowerSupplyStatus
+	ch <- collector.GPUMemoryTemperatureCelsius
+	ch <- collector.GPUPowerBrakeStatus
+	ch <- collector.GPUPowerConsumptionmW
+	ch <- collector.GPUPrimaryGPUTemperatureCelsius
+	ch <- collector.GPUThermalAlertStatus
+	ch <- collector.GPUBandwidthPercent
+	ch <- collector.GPUConsumedPowerWatt
+	ch <- collector.GPUOperatingSpeedMHz
+	ch <- collector.GPUMemoryBandwidthPercent
+	ch <- collector.GPUMemoryOperatingSpeedMHz
+    ch <- collector.DellBatteryRollupHealth
 	ch <- collector.DellEstimatedSystemAirflowCFM
 	ch <- collector.DellControllerBatteryHealth
 }
@@ -576,6 +676,17 @@ func (collector *Collector) Collect(ch chan<- prometheus.Metric) {
 		wg.Add(1)
 		go func() {
 			ok := collector.client.RefreshProcessors(collector, ch)
+			if !ok {
+				collector.errors.Add(1)
+			}
+			wg.Done()
+		}()
+	}
+
+	if collect.GPUs {
+		wg.Add(1)
+		go func() {
+			ok := collector.client.RefreshGPUs(collector, ch)
 			if !ok {
 				collector.errors.Add(1)
 			}
