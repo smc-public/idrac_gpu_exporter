@@ -8,10 +8,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/mrlhansen/idrac_exporter/internal/collector"
-	"github.com/mrlhansen/idrac_exporter/internal/config"
-	"github.com/mrlhansen/idrac_exporter/internal/log"
-	"github.com/mrlhansen/idrac_exporter/internal/version"
+	"github.com/smc-public/idrac_gpu_exporter/internal/collector"
+	"github.com/smc-public/idrac_gpu_exporter/internal/log"
+	"github.com/smc-public/idrac_gpu_exporter/internal/version"
 )
 
 const (
@@ -27,9 +26,9 @@ var gzipPool = sync.Pool{
 }
 
 const landingPageTemplate = `<html lang="en">
-<head><title>iDRAC Exporter</title></head>
+<head><title>iDRAC GPU Exporter</title></head>
 <body style="font-family: sans-serif">
-<h2>iDRAC Exporter</h2>
+<h2>iDRAC GPU Exporter</h2>
 <div>Build information: version=%s revision=%s</div>
 <ul><li><a href="/metrics">Metrics</a> (needs <code>target</code> parameter)</li></ul>
 </body>
@@ -55,11 +54,6 @@ func resetHandler(rsp http.ResponseWriter, req *http.Request) {
 	log.Debug("Handling reset-request from %s for host %s", req.Host, target)
 
 	collector.Reset(target)
-}
-
-func discoverHandler(rsp http.ResponseWriter, req *http.Request) {
-	rsp.Header().Set(contentTypeHeader, "application/json")
-	fmt.Fprint(rsp, config.GetDiscover())
 }
 
 func metricsHandler(rsp http.ResponseWriter, req *http.Request) {

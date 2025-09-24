@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/mrlhansen/idrac_exporter/internal/config"
-	"github.com/mrlhansen/idrac_exporter/internal/log"
-	"github.com/mrlhansen/idrac_exporter/internal/version"
+	"github.com/smc-public/idrac_gpu_exporter/internal/config"
+	"github.com/smc-public/idrac_gpu_exporter/internal/log"
+	"github.com/smc-public/idrac_gpu_exporter/internal/version"
 )
 
 func main() {
@@ -35,7 +35,6 @@ func main() {
 		log.SetLevel(log.LevelDebug)
 	}
 
-	http.HandleFunc("/discover", discoverHandler)
 	http.HandleFunc("/metrics", metricsHandler)
 	http.HandleFunc("/health", healthHandler)
 	http.HandleFunc("/reset", resetHandler)

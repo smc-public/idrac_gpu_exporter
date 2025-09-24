@@ -6,4 +6,4 @@ if [ -f "$auth_file" ]; then
 	export CONFIG_DEFAULT_PASSWORD=$(cut -f2- -d= $auth_file)
 fi
 
-exec bin/idrac_exporter "$@"
+exec bin/idrac_gpu_exporter "$@"

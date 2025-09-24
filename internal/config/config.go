@@ -3,10 +3,8 @@ package config
 import (
 	"fmt"
 	"os"
-	"strings"
 
-	"github.com/mrlhansen/idrac_exporter/internal/log"
-	"github.com/xhit/go-str2duration/v2"
+	"github.com/smc-public/idrac_gpu_exporter/internal/log"
 	"gopkg.in/yaml.v3"
 )
 
@@ -107,42 +105,6 @@ func (c *RootConfig) Validate() error {
 		}
 
 		v.Hostname = k
-	}
-
-	// events section
-	switch strings.ToLower(c.Event.Severity) {
-	case "ok":
-		c.Event.SeverityLevel = 0
-	case "warning", "":
-		c.Event.SeverityLevel = 1
-	case "critical":
-		c.Event.SeverityLevel = 2
-	default:
-		return fmt.Errorf("invalid value: %s", c.Event.Severity)
-	}
-
-	if c.Event.MaxAge == "" {
-		c.Event.MaxAge = "7d"
-	}
-
-	t, err := str2duration.ParseDuration(c.Event.MaxAge)
-	if err != nil {
-		return fmt.Errorf("unable to parse duration: %v", err)
-	}
-	c.Event.MaxAgeSeconds = t.Seconds()
-
-	// metrics
-	if c.Collect.All {
-		c.Collect.System = true
-		c.Collect.Sensors = true
-		c.Collect.Events = true
-		c.Collect.Power = true
-		c.Collect.Storage = true
-		c.Collect.Memory = true
-		c.Collect.Network = true
-		c.Collect.Processors = true
-		c.Collect.GPUs = true
-		c.Collect.Extra = true
 	}
 
 	return nil

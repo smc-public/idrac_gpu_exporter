@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mrlhansen/idrac_exporter/internal/config"
-	"github.com/mrlhansen/idrac_exporter/internal/log"
+	"github.com/smc-public/idrac_gpu_exporter/internal/config"
+	"github.com/smc-public/idrac_gpu_exporter/internal/log"
 )
 
 type Redfish struct {

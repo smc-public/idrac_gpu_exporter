@@ -9,7 +9,7 @@ RUN make build
 FROM ${ARCH}alpine:3.20 AS container
 
 WORKDIR /app
-COPY --from=builder /app/src/idrac_exporter /app/bin/
+COPY --from=builder /app/src/idrac_gpu_exporter /app/bin/
 RUN apk add -U bash
 COPY default-config.yml /etc/prometheus/idrac.yml
 COPY entrypoint.sh /app

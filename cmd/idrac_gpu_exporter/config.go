@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/mrlhansen/idrac_exporter/internal/collector"
-	"github.com/mrlhansen/idrac_exporter/internal/config"
-	"github.com/mrlhansen/idrac_exporter/internal/log"
+	"github.com/smc-public/idrac_gpu_exporter/internal/collector"
+	"github.com/smc-public/idrac_gpu_exporter/internal/config"
+	"github.com/smc-public/idrac_gpu_exporter/internal/log"
 )
 
 func ReloadConfig(filename string) {
@@ -29,9 +29,6 @@ func ReloadConfig(filename string) {
 		log.Error("Invalid configuration: %v", err)
 		return
 	}
-
-	old.Collect = cfg.Collect
-	old.Event = cfg.Event
 
 	old.Mutex.Lock()
 	defer old.Mutex.Unlock()
