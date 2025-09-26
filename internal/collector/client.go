@@ -23,7 +23,6 @@ const (
 type Client struct {
 	redfish     *Redfish
 	vendor      int
-	version     int
 	systemPath  string
 	procPath    string
 }

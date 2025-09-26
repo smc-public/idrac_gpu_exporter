@@ -6,20 +6,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-func health2value(health string) int {
-	switch health {
-	case "":
-		return -1
-	case "OK", "GoodInUse":
-		return 0
-	case "Warning":
-		return 1
-	case "Critical":
-		return 2
-	}
-	return 10
-}
-
 func gpuHealth2value(gpuHealth string) (bool, int) {
 	switch gpuHealth {
 	case "Critical":
@@ -85,14 +71,6 @@ func thermalAlertStatus2value(thermalAlertStatus string) (bool, int) {
 	default:
 		return false, 0
 	}
-}
-
-func linkstatus2value(status string) int {
-	switch status {
-	case "Up", "LinkUp":
-		return 1
-	}
-	return 0
 }
 
 func (mc *Collector) NewGPUInfo(ch chan<- prometheus.Metric, m *GPUInfo) {

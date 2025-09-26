@@ -2,15 +2,16 @@ package collector
 
 import (
 	"fmt"
+	"log"
 	"runtime"
 	"strings"
 	"sync"
 	"sync/atomic"
 
-	"github.com/smc-public/idrac_gpu_exporter/internal/config"
-	"github.com/smc-public/idrac_gpu_exporter/internal/version"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/expfmt"
+	"github.com/smc-public/idrac_gpu_exporter/internal/config"
+	"github.com/smc-public/idrac_gpu_exporter/internal/version"
 )
 
 var mu sync.Mutex
@@ -133,7 +134,7 @@ func NewCollector() *Collector {
 	collector.builder = new(strings.Builder)
 	collector.collected = sync.NewCond(new(sync.Mutex))
 	collector.registry = prometheus.NewRegistry()
-	collector.registry.Register(collector)
+	collector.registry.MustRegister(collector)
 
 	return collector
 }
@@ -200,8 +201,12 @@ func (collector *Collector) Gather() (string, error) {
 	}
 
 	for i := range m {
-		expfmt.MetricFamilyToText(collector.builder, m[i])
+		_, err := expfmt.MetricFamilyToText(collector.builder, m[i])
+		if err != nil {
+			log.Printf("Error converting metric to text: %v", err)
+		}
 	}
+
 
 	return collector.builder.String(), nil
 }
