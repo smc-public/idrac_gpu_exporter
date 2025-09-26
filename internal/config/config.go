@@ -43,7 +43,10 @@ func NewConfig() *RootConfig {
 func SetConfig(c *RootConfig) {
 	Config = c
 	if c.HttpsProxy != "" {
-		os.Setenv("HTTPS_PROXY", c.HttpsProxy)
+		err := os.Setenv("HTTPS_PROXY", c.HttpsProxy)
+		if err != nil {
+			log.Error("Failed to set HTTPS_PROXY environment variable: %v", err)
+		}
 	}
 }
 
@@ -54,9 +57,12 @@ func (c *RootConfig) FromFile(filename string) error {
 	}
 
 	err = yaml.NewDecoder(yamlFile).Decode(c)
-	yamlFile.Close()
 	if err != nil {
 		return fmt.Errorf("parse configuration file: %v", err)
+	}
+	err = yamlFile.Close()
+	if err != nil {
+		return fmt.Errorf("close configuration file: %v", err)
 	}
 
 	return nil

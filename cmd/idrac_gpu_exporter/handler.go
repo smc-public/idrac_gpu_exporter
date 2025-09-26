@@ -36,7 +36,12 @@ const landingPageTemplate = `<html lang="en">
 `
 
 func rootHandler(rsp http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(rsp, landingPageTemplate, version.Version, version.Revision)
+	_, err := fmt.Fprintf(rsp, landingPageTemplate, version.Version, version.Revision)
+	if err != nil {
+		log.Error("Error writing landing page to client %s: %v", req.Host, err)
+		http.Error(rsp, "Error writing landing page to client", http.StatusInternalServerError)
+		return
+	}
 }
 
 func healthHandler(rsp http.ResponseWriter, req *http.Request) {
@@ -98,12 +103,22 @@ func metricsHandler(rsp http.ResponseWriter, req *http.Request) {
 		defer gzipPool.Put(gz)
 
 		gz.Reset(w)
-		defer gz.Close()
+		defer func() {
+			err = gz.Close()
+			if err != nil {
+				log.Error("Error closing gzip writer for client %s: %v", req.Host, err)
+			}
+		}()
 
 		w = gz
 	}
 
-	fmt.Fprint(w, metrics)
+	_, err = fmt.Fprint(w, metrics)
+	if err != nil {
+		log.Error("Error writing metrics to client %s: %v", req.Host, err)
+		http.Error(rsp, "Error writing metrics to client", http.StatusInternalServerError)
+		return
+	}
 }
 
 // gzipAccepted returns whether the client will accept gzip-encoded content.

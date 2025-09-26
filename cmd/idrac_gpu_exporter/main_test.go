@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"regexp"
 	"syscall"
 
 	// "os"
@@ -49,8 +50,9 @@ func TestMain(t *testing.T) {
         t.Fatalf("Failed to read expected file: %v", err)
     }
 
-    // Compare the metrics
-    if resp != expectedContent {
+    // Compare the metrics excluding go build version
+    re := regexp.MustCompile(`"go[0-9]+.[0-9]+.[0-9]+`)
+    if re.ReplaceAllString(resp, "") != re.ReplaceAllString(expectedContent,"") {
         t.Fatalf("Metrics do not match expected content.\nGot:\n%s\nExpected:\n%s", resp, expectedContent)
     }
 }
@@ -68,7 +70,10 @@ func fileHandler(baseDir string) http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write(data)
+		_, err = w.Write(data)
+        if err != nil {
+            log.Printf("Error writing response for %s: %v", r.URL.Path, err)
+        }
 	}
 }
 
@@ -100,7 +105,10 @@ func get(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	resp.Body.Close()
+	err = resp.Body.Close()
+    if err != nil {
+        fmt.Printf("Error closing response body for URL %s: %v", url, err)
+    }
 
     return string(bodyBytes), nil
 }
@@ -130,16 +138,24 @@ func waitFor(endpoint string, secs int) bool {
 		resp, err := http.Get(endpoint)
 		if err == nil && resp.StatusCode == http.StatusOK {
 			fmt.Println("HTTP server is up and running!")
-			resp.Body.Close()
+			err = resp.Body.Close()
+            if err != nil {
+                fmt.Printf("Error closing response body for health check: %v", err)
+            }
 			return true
 		}
-		log.Printf("Waiting for server to start... (attempt %d)", i+1)
+		fmt.Printf("Waiting for server to start... (attempt %d)", i+1)
 		time.Sleep(500 * time.Millisecond)
 	}
 	return false
 }
 
 func stopExporter(cmd *exec.Cmd) {
-    syscall.Kill(-cmd.Process.Pid, syscall.SIGINT)
+    err := syscall.Kill(-cmd.Process.Pid, syscall.SIGINT)
+    if err != nil {
+        fmt.Printf("Failed to kill process: %v", err)
+        return  // Do not try to wait on a process we failed to kill
+    }
+    //nolint:errcheck // we just killed it, we don't care about the error
     cmd.Wait()
 }

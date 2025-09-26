@@ -56,6 +56,7 @@ func (log *Logger) SetLevel(level int) {
 func (log *Logger) Fatal(format string, args ...any) {
 	log.write(LevelFatal, format, args...)
 	if log.file != nil {
+		//nolint:errcheck // Nothing we can do about it here
 		log.file.Close()
 	}
 	os.Exit(1)
@@ -133,5 +134,6 @@ func (log *Logger) write(level int, format string, args ...any) {
 	dt := time.Now()
 	f := fmt.Sprintf(format, args...)
 	f = fmt.Sprintf("%s %-5s %s\n", dt.Format(log.dateFormat), lvlstr, strings.TrimSpace(f))
+	//nolint:errcheck // we can't do anything about it here
 	log.writer.Write([]byte(f))
 }
