@@ -186,17 +186,29 @@ func (client *Client) RefreshGPUs(mc *Collector, ch chan<- prometheus.Metric) bo
 			mc.NewGPUConsumedPowerWatt(ch, &gpuMetrics)
 			mc.NewGPUOperatingSpeedMHz(ch, &gpuMetrics)
 
-			// // NVIDIA
-            // TODO: check this
+			if gpuMetrics.Oem != nil {
+				nvidia := gpuMetrics.Oem.Nvidia
+				if nvidia != nil {
+					mc.NewGPUThrottleReasons(ch, nvidia.ThrottleReasons, gpuMetrics.Id)
+					mc.NewGPUSMUtilizationPercent(ch, nvidia.SMUtilizationPercent, gpuMetrics.Id)
+					mc.NewGPUSMActivityPercent(ch, nvidia.SMActivityPercent, gpuMetrics.Id)
+					mc.NewGPUSMOccupancyPercent(ch, nvidia.SMOccupancyPercent, gpuMetrics.Id)
+					mc.NewGPUTensorCoreActivityPercent(ch, nvidia.TensorCoreActivityPercent, gpuMetrics.Id)
+					mc.NewGPUHMMAUtilizationPercent(ch, nvidia.HMMAUtilizationPercent, gpuMetrics.Id)
+					mc.NewGPUPCIeRawTxBandwidthGbps(ch, nvidia.PCIeRawTxBandwidthGbps, gpuMetrics.Id)
+					mc.NewGPUPCIeRawRxBandwidthGbps(ch, nvidia.PCIeRawRxBandwidthGbps, gpuMetrics.Id)
+				}
+				dell := gpuMetrics.Oem.Dell
+				if dell != nil {
+					mc.NewGPUCurrentPCIeLinkSpeed(ch, dell.CurrentPCIeLinkSpeed, gpuMetrics.Id)
+					mc.NewGPUMaxSupportedPCIeLinkSpeed(ch, dell.MaxSupportedPCIeLinkSpeed, gpuMetrics.Id)
+					mc.NewGPUDRAMUtilizationPercent(ch, dell.DRAMUtilizationPercent, gpuMetrics.Id)
+				}
+			}
 
-			// if metrics.Oem.Nvidia != nil {
-			// 	mc.NewGPUUtilization(ch, metrics.Oem.Nvidia.UtilizationPercentage, resp.Id)
-			// 	mc.NewGPUTemperature(ch, metrics.Oem.Nvidia.TemperatureCelsius, resp.Id)
-			// 	mc.NewGPUMemoryTotal(ch, float64(metrics.Oem.Nvidia.MemoryTotalMiB*1024*1024), resp.Id)
-			// 	mc.NewGPUMemoryUsed(ch, float64(metrics.Oem.Nvidia.MemoryUsedMiB*1024*1024), resp.Id)
-			// 	mc.NewGPUMemoryFree(ch, float64(metrics.Oem.Nvidia.MemoryFreeMiB*1024*1024), resp.Id)
-			// 	mc.NewGPUMemoryUtilization(ch, metrics.Oem.Nvidia.MemoryUtilizationPercentage, resp.Id)
-			// }
+			if gpuMetrics.PCIeErrors != nil {
+				mc.NewGPUPCIeCorrectableErrorCount(ch, gpuMetrics.PCIeErrors.CorrectableErrorCount, gpuMetrics.Id)
+			}
 		}
 
 		if resp.MemorySummary.Metrics.OdataId != "" {
