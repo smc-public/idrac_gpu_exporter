@@ -165,9 +165,30 @@ type GPUMetrics struct {
 	Id                    string  `json:"Id"`
     TemperatureCelsius	  float64 `json:"TemperatureCelsius"`
     ConsumedPowerWatt 	  float64 `json:"ConsumedPowerWatt"`
-    OperatingSpeedMHz	  float64 `json:"OperatingSpeedMHz"`
-    BandwidthPercent      float64 `json:"BandwidthPercent"`
+    OperatingSpeedMHz	  *float64 `json:"OperatingSpeedMHz"`
+    BandwidthPercent      *float64 `json:"BandwidthPercent"`
+	Oem				   *struct {
+		Nvidia *struct {
+			ThrottleReasons			   []string `json:"ThrottleReasons"`
+			SMUtilizationPercent	   int      `json:"SMUtilizationPercent"`
+			SMActivityPercent		   float64  `json:"SMActivityPercent"`
+			SMOccupancyPercent		   float64  `json:"SMOccupancyPercent"`
+			TensorCoreActivityPercent   float64  `json:"TensorCoreActivityPercent"`
+			HMMAUtilizationPercent	   float64  `json:"HMMAUtilizationPercent"`
+			PCIeRawTxBandwidthGbps	   float64  `json:"PCIeRawTxBandwidthGbps"`
+			PCIeRawRxBandwidthGbps	   float64  `json:"PCIeRawRxBandwidthGbps"`
+		} `json:"Nvidia"`
+		Dell *struct {
+			CurrentPCIeLinkSpeed     int     `json:"CurrentPCIeLinkSpeed"`
+			MaxSupportedPCIeLinkSpeed int     `json:"MaxSupportedPCIeLinkSpeed"`
+			DRAMUtilizationPercent    float64 `json:"DRAMUtilizationPercent"`
+		} `json:"Dell"`
+	} `json:"Oem"`
+	PCIeErrors *struct {
+		CorrectableErrorCount int `json:"CorrectableErrorCount"`
+	} `json:"PCIeErrors"`
 }
+ 
 
 type GPUMemoryMetrics struct {
     BandwidthPercent	  float64 `json:"BandwidthPercent"`
