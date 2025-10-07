@@ -8,7 +8,7 @@
     "Oem": {
         "Nvidia": {
             "@odata.type": "#NvidiaProcessorMetrics.v1_3_0.ProcessorMetrics",
-            "ThrottleReasons": [],
+            "ThrottleReasons": ["Software"],
             "SMUtilizationPercent": 2913,
             "SMActivityPercent": 0.0,
             "SMOccupancyPercent": 0.0,

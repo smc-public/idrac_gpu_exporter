@@ -28,6 +28,26 @@ idrac_gpu_consumed_power_watt{id="Video.Slot.25-1"} 78.7
 idrac_gpu_consumed_power_watt{id="Video.Slot.26-1"} 79
 idrac_gpu_consumed_power_watt{id="Video.Slot.27-1"} 80.2
 idrac_gpu_consumed_power_watt{id="Video.Slot.28-1"} 79.4
+# HELP idrac_gpu_current_pcie_link_speed Current PCIe link speed of the GPU
+# TYPE idrac_gpu_current_pcie_link_speed gauge
+idrac_gpu_current_pcie_link_speed{id="Video.Slot.21-1"} 5
+idrac_gpu_current_pcie_link_speed{id="Video.Slot.22-1"} 5
+idrac_gpu_current_pcie_link_speed{id="Video.Slot.23-1"} 5
+idrac_gpu_current_pcie_link_speed{id="Video.Slot.24-1"} 5
+idrac_gpu_current_pcie_link_speed{id="Video.Slot.25-1"} 5
+idrac_gpu_current_pcie_link_speed{id="Video.Slot.26-1"} 5
+idrac_gpu_current_pcie_link_speed{id="Video.Slot.27-1"} 5
+idrac_gpu_current_pcie_link_speed{id="Video.Slot.28-1"} 5
+# HELP idrac_gpu_dram_utilization_percent DRAM utilization of the GPU in percent
+# TYPE idrac_gpu_dram_utilization_percent gauge
+idrac_gpu_dram_utilization_percent{id="Video.Slot.21-1"} 0
+idrac_gpu_dram_utilization_percent{id="Video.Slot.22-1"} 0
+idrac_gpu_dram_utilization_percent{id="Video.Slot.23-1"} 0
+idrac_gpu_dram_utilization_percent{id="Video.Slot.24-1"} 0
+idrac_gpu_dram_utilization_percent{id="Video.Slot.25-1"} 0
+idrac_gpu_dram_utilization_percent{id="Video.Slot.26-1"} 0
+idrac_gpu_dram_utilization_percent{id="Video.Slot.27-1"} 0
+idrac_gpu_dram_utilization_percent{id="Video.Slot.28-1"} 0
 # HELP idrac_gpu_exporter_build_info Constant metric with build information for the exporter
 # TYPE idrac_gpu_exporter_build_info untyped
 idrac_gpu_exporter_build_info{goversion="go1.23.1",revision="",version=""} 1
@@ -44,6 +64,16 @@ idrac_gpu_health{id="Video.Slot.25-1",status="OK"} 2
 idrac_gpu_health{id="Video.Slot.26-1",status="OK"} 2
 idrac_gpu_health{id="Video.Slot.27-1",status="OK"} 2
 idrac_gpu_health{id="Video.Slot.28-1",status="OK"} 2
+# HELP idrac_gpu_hmma_utilization_percent HMMA (Hybrid Matrix Multiply-Accumulate) utilization of the GPU in percent
+# TYPE idrac_gpu_hmma_utilization_percent gauge
+idrac_gpu_hmma_utilization_percent{id="Video.Slot.21-1"} 0
+idrac_gpu_hmma_utilization_percent{id="Video.Slot.22-1"} 0
+idrac_gpu_hmma_utilization_percent{id="Video.Slot.23-1"} 0
+idrac_gpu_hmma_utilization_percent{id="Video.Slot.24-1"} 0
+idrac_gpu_hmma_utilization_percent{id="Video.Slot.25-1"} 0
+idrac_gpu_hmma_utilization_percent{id="Video.Slot.26-1"} 0
+idrac_gpu_hmma_utilization_percent{id="Video.Slot.27-1"} 0
+idrac_gpu_hmma_utilization_percent{id="Video.Slot.28-1"} 0
 # HELP idrac_gpu_info Information about the GPU
 # TYPE idrac_gpu_info untyped
 idrac_gpu_info{id="Video.Slot.21-1",manufacturer="NVIDIA Corporation",model="NVIDIA H200",part_number="692-2G520-0280-001",serial_number="1653824200703",uuid="7bc0e864ac5e6f1f3f4e468d8cb72eae"} 1
@@ -54,6 +84,16 @@ idrac_gpu_info{id="Video.Slot.25-1",manufacturer="NVIDIA Corporation",model="NVI
 idrac_gpu_info{id="Video.Slot.26-1",manufacturer="NVIDIA Corporation",model="NVIDIA H200",part_number="692-2G520-0280-001",serial_number="1653824201536",uuid="32b85d9d4df56ec25a71d4db2899d6a2"} 1
 idrac_gpu_info{id="Video.Slot.27-1",manufacturer="NVIDIA Corporation",model="NVIDIA H200",part_number="692-2G520-0280-001",serial_number="1653824200527",uuid="0d77eb8e940575e1cdb2915b31964481"} 1
 idrac_gpu_info{id="Video.Slot.28-1",manufacturer="NVIDIA Corporation",model="NVIDIA H200",part_number="692-2G520-0280-001",serial_number="1653824201434",uuid="6108731b5ec3d248596ef5927e9dab51"} 1
+# HELP idrac_gpu_max_supported_pcie_link_speed Maximum supported PCIe link speed of the GPU
+# TYPE idrac_gpu_max_supported_pcie_link_speed gauge
+idrac_gpu_max_supported_pcie_link_speed{id="Video.Slot.21-1"} 5
+idrac_gpu_max_supported_pcie_link_speed{id="Video.Slot.22-1"} 5
+idrac_gpu_max_supported_pcie_link_speed{id="Video.Slot.23-1"} 5
+idrac_gpu_max_supported_pcie_link_speed{id="Video.Slot.24-1"} 5
+idrac_gpu_max_supported_pcie_link_speed{id="Video.Slot.25-1"} 5
+idrac_gpu_max_supported_pcie_link_speed{id="Video.Slot.26-1"} 5
+idrac_gpu_max_supported_pcie_link_speed{id="Video.Slot.27-1"} 5
+idrac_gpu_max_supported_pcie_link_speed{id="Video.Slot.28-1"} 5
 # HELP idrac_gpu_memory_bandwidth_percent Utilization of the GPU memory in percent
 # TYPE idrac_gpu_memory_bandwidth_percent gauge
 idrac_gpu_memory_bandwidth_percent{id="Video.Slot.21-1"} 0
@@ -94,6 +134,36 @@ idrac_gpu_operating_speed_mhz{id="Video.Slot.25-1"} 345
 idrac_gpu_operating_speed_mhz{id="Video.Slot.26-1"} 345
 idrac_gpu_operating_speed_mhz{id="Video.Slot.27-1"} 345
 idrac_gpu_operating_speed_mhz{id="Video.Slot.28-1"} 345
+# HELP idrac_gpu_pcie_correctable_error_count Number of correctable PCIe errors of the GPU
+# TYPE idrac_gpu_pcie_correctable_error_count counter
+idrac_gpu_pcie_correctable_error_count{id="Video.Slot.21-1"} 0
+idrac_gpu_pcie_correctable_error_count{id="Video.Slot.22-1"} 0
+idrac_gpu_pcie_correctable_error_count{id="Video.Slot.23-1"} 0
+idrac_gpu_pcie_correctable_error_count{id="Video.Slot.24-1"} 0
+idrac_gpu_pcie_correctable_error_count{id="Video.Slot.25-1"} 0
+idrac_gpu_pcie_correctable_error_count{id="Video.Slot.26-1"} 0
+idrac_gpu_pcie_correctable_error_count{id="Video.Slot.27-1"} 0
+idrac_gpu_pcie_correctable_error_count{id="Video.Slot.28-1"} 0
+# HELP idrac_gpu_pcie_raw_rx_bandwidth_gbps PCIe raw receive bandwidth of the GPU in Gbps
+# TYPE idrac_gpu_pcie_raw_rx_bandwidth_gbps gauge
+idrac_gpu_pcie_raw_rx_bandwidth_gbps{id="Video.Slot.21-1"} 0
+idrac_gpu_pcie_raw_rx_bandwidth_gbps{id="Video.Slot.22-1"} 0
+idrac_gpu_pcie_raw_rx_bandwidth_gbps{id="Video.Slot.23-1"} 0
+idrac_gpu_pcie_raw_rx_bandwidth_gbps{id="Video.Slot.24-1"} 0
+idrac_gpu_pcie_raw_rx_bandwidth_gbps{id="Video.Slot.25-1"} 0
+idrac_gpu_pcie_raw_rx_bandwidth_gbps{id="Video.Slot.26-1"} 0
+idrac_gpu_pcie_raw_rx_bandwidth_gbps{id="Video.Slot.27-1"} 0
+idrac_gpu_pcie_raw_rx_bandwidth_gbps{id="Video.Slot.28-1"} 0
+# HELP idrac_gpu_pcie_raw_tx_bandwidth_gbps PCIe raw transmit bandwidth of the GPU in Gbps
+# TYPE idrac_gpu_pcie_raw_tx_bandwidth_gbps gauge
+idrac_gpu_pcie_raw_tx_bandwidth_gbps{id="Video.Slot.21-1"} 0
+idrac_gpu_pcie_raw_tx_bandwidth_gbps{id="Video.Slot.22-1"} 0
+idrac_gpu_pcie_raw_tx_bandwidth_gbps{id="Video.Slot.23-1"} 0
+idrac_gpu_pcie_raw_tx_bandwidth_gbps{id="Video.Slot.24-1"} 0
+idrac_gpu_pcie_raw_tx_bandwidth_gbps{id="Video.Slot.25-1"} 0
+idrac_gpu_pcie_raw_tx_bandwidth_gbps{id="Video.Slot.26-1"} 0
+idrac_gpu_pcie_raw_tx_bandwidth_gbps{id="Video.Slot.27-1"} 0
+idrac_gpu_pcie_raw_tx_bandwidth_gbps{id="Video.Slot.28-1"} 0
 # HELP idrac_gpu_power_brake_status Status of the GPU power brake
 # TYPE idrac_gpu_power_brake_status gauge
 idrac_gpu_power_brake_status{id="Video.Slot.21-1",status="Released"} 1
@@ -114,6 +184,36 @@ idrac_gpu_primary_gpu_temperature_celsius{id="Video.Slot.25-1"} 40
 idrac_gpu_primary_gpu_temperature_celsius{id="Video.Slot.26-1"} 38
 idrac_gpu_primary_gpu_temperature_celsius{id="Video.Slot.27-1"} 40
 idrac_gpu_primary_gpu_temperature_celsius{id="Video.Slot.28-1"} 38
+# HELP idrac_gpu_sm_activity_percent Streaming Multiprocessor (SM) activity of the GPU in percent
+# TYPE idrac_gpu_sm_activity_percent gauge
+idrac_gpu_sm_activity_percent{id="Video.Slot.21-1"} 0
+idrac_gpu_sm_activity_percent{id="Video.Slot.22-1"} 0
+idrac_gpu_sm_activity_percent{id="Video.Slot.23-1"} 0
+idrac_gpu_sm_activity_percent{id="Video.Slot.24-1"} 0
+idrac_gpu_sm_activity_percent{id="Video.Slot.25-1"} 0
+idrac_gpu_sm_activity_percent{id="Video.Slot.26-1"} 0
+idrac_gpu_sm_activity_percent{id="Video.Slot.27-1"} 0
+idrac_gpu_sm_activity_percent{id="Video.Slot.28-1"} 0
+# HELP idrac_gpu_sm_occupancy_percent Streaming Multiprocessor (SM) occupancy of the GPU in percent
+# TYPE idrac_gpu_sm_occupancy_percent gauge
+idrac_gpu_sm_occupancy_percent{id="Video.Slot.21-1"} 0
+idrac_gpu_sm_occupancy_percent{id="Video.Slot.22-1"} 0
+idrac_gpu_sm_occupancy_percent{id="Video.Slot.23-1"} 0
+idrac_gpu_sm_occupancy_percent{id="Video.Slot.24-1"} 0
+idrac_gpu_sm_occupancy_percent{id="Video.Slot.25-1"} 0
+idrac_gpu_sm_occupancy_percent{id="Video.Slot.26-1"} 0
+idrac_gpu_sm_occupancy_percent{id="Video.Slot.27-1"} 0
+idrac_gpu_sm_occupancy_percent{id="Video.Slot.28-1"} 0
+# HELP idrac_gpu_sm_utilization_percent Streaming Multiprocessor (SM) utilization of the GPU in percent
+# TYPE idrac_gpu_sm_utilization_percent gauge
+idrac_gpu_sm_utilization_percent{id="Video.Slot.21-1"} 2913
+idrac_gpu_sm_utilization_percent{id="Video.Slot.22-1"} 2924
+idrac_gpu_sm_utilization_percent{id="Video.Slot.23-1"} 2901
+idrac_gpu_sm_utilization_percent{id="Video.Slot.24-1"} 2898
+idrac_gpu_sm_utilization_percent{id="Video.Slot.25-1"} 2912
+idrac_gpu_sm_utilization_percent{id="Video.Slot.26-1"} 2921
+idrac_gpu_sm_utilization_percent{id="Video.Slot.27-1"} 2904
+idrac_gpu_sm_utilization_percent{id="Video.Slot.28-1"} 2899
 # HELP idrac_gpu_state State of the GPU
 # TYPE idrac_gpu_state gauge
 idrac_gpu_state{id="Video.Slot.21-1",state="Available"} 0
@@ -124,6 +224,16 @@ idrac_gpu_state{id="Video.Slot.25-1",state="Available"} 0
 idrac_gpu_state{id="Video.Slot.26-1",state="Available"} 0
 idrac_gpu_state{id="Video.Slot.27-1",state="Available"} 0
 idrac_gpu_state{id="Video.Slot.28-1",state="Available"} 0
+# HELP idrac_gpu_tensor_core_activity_percent Tensor Core activity of the GPU in percent
+# TYPE idrac_gpu_tensor_core_activity_percent gauge
+idrac_gpu_tensor_core_activity_percent{id="Video.Slot.21-1"} 0
+idrac_gpu_tensor_core_activity_percent{id="Video.Slot.22-1"} 0
+idrac_gpu_tensor_core_activity_percent{id="Video.Slot.23-1"} 0
+idrac_gpu_tensor_core_activity_percent{id="Video.Slot.24-1"} 0
+idrac_gpu_tensor_core_activity_percent{id="Video.Slot.25-1"} 0
+idrac_gpu_tensor_core_activity_percent{id="Video.Slot.26-1"} 0
+idrac_gpu_tensor_core_activity_percent{id="Video.Slot.27-1"} 0
+idrac_gpu_tensor_core_activity_percent{id="Video.Slot.28-1"} 0
 # HELP idrac_gpu_thermal_alert_status Thermal alert status of the GPU
 # TYPE idrac_gpu_thermal_alert_status gauge
 idrac_gpu_thermal_alert_status{id="Video.Slot.21-1",status="NotPending"} 1
@@ -134,3 +244,6 @@ idrac_gpu_thermal_alert_status{id="Video.Slot.25-1",status="NotPending"} 1
 idrac_gpu_thermal_alert_status{id="Video.Slot.26-1",status="NotPending"} 1
 idrac_gpu_thermal_alert_status{id="Video.Slot.27-1",status="NotPending"} 1
 idrac_gpu_thermal_alert_status{id="Video.Slot.28-1",status="NotPending"} 1
+# HELP idrac_gpu_throttle_reason Reason for GPU throttling
+# TYPE idrac_gpu_throttle_reason gauge
+idrac_gpu_throttle_reason{id="Video.Slot.21-1",reason="Software"} 1

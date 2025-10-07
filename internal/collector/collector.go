@@ -31,19 +31,31 @@ type Collector struct {
 	ExporterScrapeErrorsTotal *prometheus.Desc
 
 	// GPUs
-	GPUInfo         *prometheus.Desc
-	GPUState        *prometheus.Desc 
-	GPUHealth       *prometheus.Desc
+	GPUInfo                         *prometheus.Desc
+	GPUState                        *prometheus.Desc
+	GPUHealth                       *prometheus.Desc
 	GPUBoardPowerSupplyStatus       *prometheus.Desc
-	GPUMemoryTemperatureCelsius       *prometheus.Desc
-	GPUPowerBrakeStatus       *prometheus.Desc
-	GPUPrimaryGPUTemperatureCelsius       *prometheus.Desc
-	GPUThermalAlertStatus       *prometheus.Desc
-	GPUBandwidthPercent       *prometheus.Desc
-	GPUConsumedPowerWatt      *prometheus.Desc
-	GPUOperatingSpeedMHz       *prometheus.Desc
+	GPUMemoryTemperatureCelsius     *prometheus.Desc
+	GPUPowerBrakeStatus             *prometheus.Desc
+	GPUPrimaryGPUTemperatureCelsius *prometheus.Desc
+	GPUThermalAlertStatus           *prometheus.Desc
+	GPUBandwidthPercent             *prometheus.Desc
+	GPUConsumedPowerWatt            *prometheus.Desc
+	GPUOperatingSpeedMHz            *prometheus.Desc
 	GPUMemoryBandwidthPercent       *prometheus.Desc
-	GPUMemoryOperatingSpeedMHz       *prometheus.Desc
+	GPUMemoryOperatingSpeedMHz      *prometheus.Desc
+	GPUThrottleReason               *prometheus.Desc
+	GPUSMUtilizationPercent         *prometheus.Desc
+	GPUSMActivityPercent            *prometheus.Desc
+	GPUSMOccupancyPercent           *prometheus.Desc
+	GPUTensorCoreActivityPercent    *prometheus.Desc
+	GPUHMMAUtilizationPercent       *prometheus.Desc
+	GPUPCIeRawTxBandwidthGbps       *prometheus.Desc
+	GPUPCIeRawRxBandwidthGbps       *prometheus.Desc
+	GPUCurrentPCIeLinkSpeed         *prometheus.Desc
+	GPUMaxSupportedPCIeLinkSpeed    *prometheus.Desc
+	GPUDRAMUtilizationPercent       *prometheus.Desc
+	GPUPCIeCorrectableErrorCount    *prometheus.Desc
 }
 
 func NewCollector() *Collector {
@@ -129,6 +141,66 @@ func NewCollector() *Collector {
 			"Operating speed of the GPU memory in Mhz",
 			[]string{"id"}, nil,
 		),
+		GPUThrottleReason: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "throttle_reason"),
+			"Reason for GPU throttling",
+			[]string{"id", "reason"}, nil,
+		),
+		GPUSMUtilizationPercent: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "sm_utilization_percent"),
+			"Streaming Multiprocessor (SM) utilization of the GPU in percent",
+			[]string{"id"}, nil,
+		),
+		GPUSMActivityPercent: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "sm_activity_percent"),
+			"Streaming Multiprocessor (SM) activity of the GPU in percent",
+			[]string{"id"}, nil,
+		),
+		GPUSMOccupancyPercent: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "sm_occupancy_percent"),
+			"Streaming Multiprocessor (SM) occupancy of the GPU in percent",
+			[]string{"id"}, nil,
+		),
+		GPUTensorCoreActivityPercent: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "tensor_core_activity_percent"),
+			"Tensor Core activity of the GPU in percent",
+			[]string{"id"}, nil,
+		),
+		GPUHMMAUtilizationPercent: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "hmma_utilization_percent"),
+			"HMMA (Hybrid Matrix Multiply-Accumulate) utilization of the GPU in percent",
+			[]string{"id"}, nil,
+		),
+		GPUPCIeRawTxBandwidthGbps: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "pcie_raw_tx_bandwidth_gbps"),
+			"PCIe raw transmit bandwidth of the GPU in Gbps",
+			[]string{"id"}, nil,
+		),
+		GPUPCIeRawRxBandwidthGbps: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "pcie_raw_rx_bandwidth_gbps"),
+			"PCIe raw receive bandwidth of the GPU in Gbps",
+			[]string{"id"}, nil,
+		),
+		GPUCurrentPCIeLinkSpeed: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "current_pcie_link_speed"),
+			"Current PCIe link speed of the GPU",
+			[]string{"id"}, nil,
+		),
+		GPUMaxSupportedPCIeLinkSpeed: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "max_supported_pcie_link_speed"),
+			"Maximum supported PCIe link speed of the GPU",
+			[]string{"id"}, nil,
+		),
+		GPUDRAMUtilizationPercent: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "dram_utilization_percent"),
+			"DRAM utilization of the GPU in percent",
+			[]string{"id"}, nil,
+		),
+		GPUPCIeCorrectableErrorCount: prometheus.NewDesc(
+			prometheus.BuildFQName(prefix, "gpu", "pcie_correctable_error_count"),
+			"Number of correctable PCIe errors of the GPU",
+			[]string{"id"}, nil,
+		),
 	}
 
 	collector.builder = new(strings.Builder)
@@ -155,6 +227,18 @@ func (collector *Collector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.GPUOperatingSpeedMHz
 	ch <- collector.GPUMemoryBandwidthPercent
 	ch <- collector.GPUMemoryOperatingSpeedMHz
+	ch <- collector.GPUThrottleReason
+	ch <- collector.GPUSMUtilizationPercent
+	ch <- collector.GPUSMActivityPercent
+	ch <- collector.GPUSMOccupancyPercent
+	ch <- collector.GPUTensorCoreActivityPercent
+	ch <- collector.GPUHMMAUtilizationPercent
+	ch <- collector.GPUPCIeRawTxBandwidthGbps
+	ch <- collector.GPUPCIeRawRxBandwidthGbps
+	ch <- collector.GPUCurrentPCIeLinkSpeed
+	ch <- collector.GPUMaxSupportedPCIeLinkSpeed
+	ch <- collector.GPUDRAMUtilizationPercent
+	ch <- collector.GPUPCIeCorrectableErrorCount
 }
 
 func (collector *Collector) Collect(ch chan<- prometheus.Metric) {
@@ -206,7 +290,6 @@ func (collector *Collector) Gather() (string, error) {
 			log.Printf("Error converting metric to text: %v", err)
 		}
 	}
-
 
 	return collector.builder.String(), nil
 }
